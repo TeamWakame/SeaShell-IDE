@@ -16,6 +16,7 @@ protected:
 
 private:
     QSettings *settings;
+    void apply(QString color, QString pattern, QString textToApply);
 };
 
 #endif // HIGHLIGHTER_H
