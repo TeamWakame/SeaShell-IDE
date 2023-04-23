@@ -21,7 +21,7 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QTreeView" name="treeView">
+       <widget class="QTreeView" name="filesView">
         <property name="maximumSize">
          <size>
           <width>270</width>
@@ -45,7 +45,12 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QTextEdit" name="textEdit">
+       <widget class="QTextEdit" name="codeEditor">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
         <property name="frameShape">
          <enum>QFrame::Box</enum>
         </property>
@@ -70,6 +75,7 @@
     </property>
     <addaction name="actionNew_file"/>
     <addaction name="actionOpen_file"/>
+    <addaction name="actionOpen_folder"/>
     <addaction name="actionSave_file"/>
     <addaction name="actionSave_file_as"/>
     <addaction name="separator"/>
@@ -94,8 +100,7 @@
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="actionElement_1"/>
-    <addaction name="actionElement_2"/>
+    <addaction name="actionFiles_views"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuBuild_Launch"/>
@@ -188,20 +193,17 @@
     <string>Build/Launch</string>
    </property>
   </action>
-  <action name="actionElement_1">
+  <action name="actionFiles_views">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Element 1</string>
+    <string>Files views</string>
    </property>
   </action>
-  <action name="actionElement_2">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
+  <action name="actionOpen_folder">
    <property name="text">
-    <string>Element 2</string>
+    <string>Open folder</string>
    </property>
   </action>
  </widget>

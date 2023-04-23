@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QFileSystemModel>
 
 #include "highlighter.h"
 
@@ -20,10 +21,22 @@ public:
     static void getSettings();
 
 private slots:
+    void on_filesView_doubleClicked(const QModelIndex &index);
+    void on_actionFiles_views_toggled(bool arg1);
+
+    void on_actionOpen_folder_triggered();
+
+    void on_actionOpen_file_triggered();
+
+    void on_actionAbout_Qt_triggered();
 
 private:
     Ui::MainWindow *ui;
     void actu();
     MyHighlighter *highlighter;
+    QFileSystemModel *model;
+    QSettings *settings;
+    QString endFile;
+    bool isFileOpen;
 };
 #endif // MAINWINDOW_H

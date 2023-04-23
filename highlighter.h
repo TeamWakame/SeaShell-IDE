@@ -8,7 +8,6 @@
 class MyHighlighter : public QSyntaxHighlighter
 {
 public:
-    //MyHighlighter(QTextDocument *parent = 0) : QSyntaxHighlighter(parent) {}
     MyHighlighter(QTextDocument *parent = 0);
     void highlightBlock(const QString &text);
 

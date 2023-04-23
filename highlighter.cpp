@@ -8,18 +8,7 @@
 
 MyHighlighter::MyHighlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 {
-    if(QFile::exists(QCoreApplication::applicationDirPath()+"settings.ini"))
-        settings = new QSettings(QCoreApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat, this);
-    else
-    {
-        settings = new QSettings(QCoreApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat, this);
-        settings->setValue("invertedCommasColor", "#153AE3");
-        settings->setValue("typeAndBaseWordColor", "#D45A40");
-        settings->setValue("annotationColor", "#6C87FF");
-        settings->setValue("printColor", "#E8DE42");
-        settings->setValue("operatorColor", "#A69C00");
-        settings->setValue("braceAndParthesisColor", "#FF39E7");
-    }
+    settings = new QSettings(QCoreApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat, this);
 }
 
 void MyHighlighter::highlightBlock(const QString &text)
@@ -33,6 +22,7 @@ void MyHighlighter::highlightBlock(const QString &text)
      * Text between beacon => "\BEACON[^\"]*\BEACON" (beteween [] -> excluded)
      */
 
+    //Define dans apply all syntactic colouring
     apply(settings->value("invertedCommasColor").toString(), "\"[^\"]*\"", text);
     apply(settings->value("invertedCommasColor").toString(), "\\/*[^\"]*\\*/", text);
     apply(settings->value("typeAndBaseWordColor").toString(), "\\bint|float|boolean|chr|str|if|else\\b", text);
