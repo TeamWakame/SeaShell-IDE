@@ -10,6 +10,7 @@
 #include <fstream>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QListWidgetItem>
 
 using namespace std;
 
@@ -19,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->setWindowTitle("SeaShell-IDE");
+    currentTitle = "SeaShell-IDE";
+    this->setWindowTitle(currentTitle);
 
     ui->actionFiles_views->setChecked(0);
     ui->filesView->hide();
@@ -47,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     highlighter = new MyHighlighter(ui->codeEditor->document());
 
-    endFile = "C:/";
-    isFileOpen = false;
+    endFolder = "C:/";
+    currentFilePath = "";
 }
 
 MainWindow::~MainWindow()
@@ -61,26 +63,14 @@ void MainWindow::actu()
     highlighter->highlightBlock(ui->codeEditor->toPlainText());
 }
 
-
-void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
+void MainWindow::on_codeEditor_textChanged()
 {
-    QFileInfo fi(model->filePath(index));
-    ifstream file(model->filePath(index).toStdString().c_str());
-    QString text = "";
-    if(fi.suffix() == "wk" && file)
-    {
-        string line;
+    this->setWindowTitle(currentTitle + "*");
+}
 
-        while(getline(file, line)) // Pour récupérer tout le fichier
-        {
-            text += QString::fromStdString(line);
-        }
-        ui->codeEditor->setText(text);
-    }
-    else
-    {
-        QDesktopServices::openUrl(QUrl::fromLocalFile(model->filePath(index))); //Open the selected file
-    }
+void MainWindow::on_actionAbout_Qt_triggered()
+{
+    QMessageBox::aboutQt(this, "About Qt");
 }
 
 void MainWindow::on_actionFiles_views_toggled(bool arg1)
@@ -91,6 +81,86 @@ void MainWindow::on_actionFiles_views_toggled(bool arg1)
         ui->filesView->show();
 }
 
+void MainWindow::openedFile(QString filePath, QString message)
+{
+    /*
+     * This method handles :
+     *  - The interface
+     *  - The list of open documents
+     *  - The current document
+     *  When a file is opened.
+    */
+
+    ui->codeEditor->setEnabled(true);
+    ui->statusbar->showMessage(message);
+    currentFilePath = filePath;
+
+    QFileInfo current(filePath);
+    currentTitle += " - " + current.baseName();
+    this->setWindowTitle(currentTitle);
+
+    if(!openedFiles.contains(filePath))
+    {
+        openedFiles.append(filePath);
+        openedFilesName.append(current.baseName());
+        ui->openedFilesView->addItem(filePath);
+    }
+}
+
+void MainWindow::openFile(QString filePath)
+{
+    /*
+     * This method open files and set content in the QTextEdit 'codeEditor'
+    */
+
+    ifstream file(filePath.toStdString().c_str());
+    string text = "";
+    if(file && filePath != "")
+    {
+        string line;
+
+        while(getline(file, line)) // Pour récupérer tout le fichier
+        {
+            text += line + "\n";
+        }
+        ui->codeEditor->setPlainText(QString::fromStdString(text));
+
+        openedFile(filePath, "Current file : " + filePath);
+    }
+    else
+        QMessageBox::critical(this, "Opening error", "The opening of your file has failed.");
+}
+
+void MainWindow::saveFile(QString filePath, QString content)
+{
+    /*
+     * This method save files with content
+    */
+    ofstream file(filePath.toStdString().c_str());
+
+    if(file && filePath != "")
+    {
+        file << content.toStdString();
+        this->setWindowTitle(currentTitle);
+    }
+    else
+    {
+        QMessageBox::critical(this, "Saving error", "Saving your file failed !\nFile : " + currentFilePath);
+    }
+}
+
+void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
+{
+    QFileInfo  fi(model->filePath(index));
+    if(fi.suffix() == "wk")
+    {
+        openFile(model->filePath(index));
+    }
+    else
+    {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(model->filePath(index))); //Open the selected file
+    }
+}
 
 void MainWindow::on_actionOpen_folder_triggered()
 {
@@ -102,47 +172,46 @@ void MainWindow::on_actionOpen_folder_triggered()
 
     ui->filesView->show();
     ui->actionFiles_views->setChecked(1);
+
+    endFolder = pathToFolder;
 }
 
 
 void MainWindow::on_actionOpen_file_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, "Ouvrir", endFile, "Wakame file (*.wk)");
+    QString fileName = QFileDialog::getOpenFileName(this, "Ouvrir", endFolder, "Wakame file (*.wk)");
 
-    string FileName = fileName.toStdString();
-    ifstream strFileName(FileName.c_str());
+    openFile(fileName);
+}
 
-    if (fileName != "")
+void MainWindow::on_openedFilesView_clicked(const QModelIndex &index)
+{
+    openFile(model->fileName(index));
+}
+
+void MainWindow::on_actionNew_file_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "New file", endFolder, "Wakame file (*.wk)");
+    saveFile(fileName, "");
+    openedFile(fileName, "Current file : " + fileName);
+}
+
+void MainWindow::on_actionSave_file_as_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Save as", endFolder, "Wakame file (*.wk)");
+    saveFile(fileName, ui->codeEditor->toPlainText());
+    openedFile(fileName, "Current file : " + fileName);
+}
+
+
+void MainWindow::on_actionSave_file_triggered()
+{
+    if (currentFilePath != "")
     {
-        if(strFileName)
-        {
-            string ligne;
-            string texte;
-
-            ui->codeEditor->clear();
-
-            while(std::getline(strFileName, ligne)) // Pour récupérer tout le fichier
-            {
-                texte += ligne;
-                // ui->textEdit->append(QString::fromStdString(ligne));
-            }
-            ui->codeEditor->setHtml(QString::fromStdString(texte));
-        }
-        else
-        {
-            QMessageBox::critical(this, "Erreur d'ouverture", "L'ouverture de votre fichier a échoué");
-        }
-
-        isFileOpen = true;
-        endFile = fileName;
-
-        ui->statusbar->showMessage("Current file : "+fileName);
+        saveFile(currentFilePath, ui->codeEditor->toPlainText());
+    }
+    else
+    {
+        MainWindow::on_actionSave_file_as_triggered();
     }
 }
-
-
-void MainWindow::on_actionAbout_Qt_triggered()
-{
-    QMessageBox::aboutQt(this, "About Qt");
-}
-

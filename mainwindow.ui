@@ -31,12 +31,15 @@
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="listView">
+       <widget class="QListWidget" name="openedFilesView">
         <property name="maximumSize">
          <size>
           <width>270</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="resizeMode">
+         <enum>QListView::Adjust</enum>
         </property>
        </widget>
       </item>
@@ -46,6 +49,9 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QTextEdit" name="codeEditor">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="font">
          <font>
           <pointsize>12</pointsize>
@@ -132,20 +138,32 @@
    <property name="text">
     <string>New file</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionOpen_file">
    <property name="text">
     <string>Open file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionSave_file">
    <property name="text">
     <string>Save file</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionSave_file_as">
    <property name="text">
     <string>Save file as</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionQuit">

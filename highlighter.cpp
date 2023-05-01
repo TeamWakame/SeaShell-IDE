@@ -23,12 +23,12 @@ void MyHighlighter::highlightBlock(const QString &text)
      */
 
     //Define dans apply all syntactic colouring
-    apply(settings->value("invertedCommasColor").toString(), "\"[^\"]*\"", text);
-    apply(settings->value("invertedCommasColor").toString(), "\\/*[^\"]*\\*/", text);
     apply(settings->value("typeAndBaseWordColor").toString(), "\\bint|float|boolean|chr|str|if|else\\b", text);
-    apply(settings->value("annotationColor").toString(), "\\##[^\"]*\\w+|##", text);
     apply(settings->value("operatorColor").toString(), "\\|\\||&&|!|^^|==|<<|>>|>=|<=", text);
     apply(settings->value("braceAndParthesisColor").toString(), "{|}|\\(|\\)", text);
+    apply(settings->value("invertedCommasColor").toString(), "\"[^\"]*\"", text);
+    apply(settings->value("invertedCommasColor").toString(), "\\/*[^\"]*\\*/", text);
+    apply(settings->value("annotationColor").toString(), "\\##[^\"]*\\w+|##", text);
 }
 
 void MyHighlighter::apply(QString color, QString pattern, QString textToApply)

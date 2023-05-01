@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSettings>
 #include <QFileSystemModel>
+#include <QList>
 
 #include "highlighter.h"
 
@@ -30,13 +31,29 @@ private slots:
 
     void on_actionAbout_Qt_triggered();
 
+    void on_openedFilesView_clicked(const QModelIndex &index);
+
+    void on_actionSave_file_as_triggered();
+
+    void on_actionNew_file_triggered();
+
+    void on_actionSave_file_triggered();
+
+    void on_codeEditor_textChanged();
+
 private:
     Ui::MainWindow *ui;
     void actu();
+    void openedFile(QString filePath, QString message);
+    void openFile(QString filePath);
+    void saveFile(QString filePath, QString content);
     MyHighlighter *highlighter;
     QFileSystemModel *model;
     QSettings *settings;
-    QString endFile;
-    bool isFileOpen;
+    QString endFolder;
+    QList<QString> openedFiles;
+    QList<QString> openedFilesName;
+    QString currentFilePath;
+    QString currentTitle;
 };
 #endif // MAINWINDOW_H
