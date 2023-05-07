@@ -85,6 +85,8 @@
     <addaction name="actionSave_file"/>
     <addaction name="actionSave_file_as"/>
     <addaction name="separator"/>
+    <addaction name="actionSettings"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuBuild_Launch">
@@ -222,6 +224,11 @@
   <action name="actionOpen_folder">
    <property name="text">
     <string>Open folder</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>

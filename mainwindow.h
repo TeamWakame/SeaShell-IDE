@@ -41,6 +41,8 @@ private slots:
 
     void on_codeEditor_textChanged();
 
+    void on_actionSettings_triggered();
+
 private:
     Ui::MainWindow *ui;
     void actu();

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "highlighter.h"
+#include "settingswindow.h"
 
 #include <QFileSystemModel>
 #include <QTimer>
@@ -37,15 +38,13 @@ MainWindow::MainWindow(QWidget *parent)
         settings->setValue("printColor", "#E8DE42");
         settings->setValue("operatorColor", "#A69C00");
         settings->setValue("braceAndParthesisColor", "#FF39E7");
+
         settings->setValue("fontFamily", "Consolas");
         settings->setValue("fontSize", 12);
     }
 
     ui->codeEditor->setFontFamily(settings->value("fontFamily").toString());
     ui->codeEditor->setFontPointSize(settings->value("fontSize").toInt());
-
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::actu);timer->start(1000);
 
     highlighter = new MyHighlighter(ui->codeEditor->document());
 
@@ -215,3 +214,10 @@ void MainWindow::on_actionSave_file_triggered()
         MainWindow::on_actionSave_file_as_triggered();
     }
 }
+
+void MainWindow::on_actionSettings_triggered()
+{
+    SettingsWindow *sWindow = new SettingsWindow();
+    sWindow->show();
+}
+
