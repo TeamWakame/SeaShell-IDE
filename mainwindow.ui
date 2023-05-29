@@ -54,7 +54,8 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>12</pointsize>
+          <family>Consolas</family>
+          <pointsize>9</pointsize>
          </font>
         </property>
         <property name="frameShape">

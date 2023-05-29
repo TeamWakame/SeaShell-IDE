@@ -21,7 +21,11 @@ private slots:
 
     void on_changeColorPushButton_clicked();
 
-    void on_setAsDefaultPushButton_clicked();
+    void on_setAsDefaultColorPushButton_clicked();
+
+    void on_setAsDefaultFontPushButton_clicked();
+
+    void on_selectFontPushButton_clicked();
 
 private:
     Ui::SettingsWindow *ui;

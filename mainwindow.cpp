@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
         settings->setValue("printColor", "#E8DE42");
         settings->setValue("operatorColor", "#A69C00");
         settings->setValue("braceAndParthesisColor", "#FF39E7");
+        settings->setValue("assignmentAndConstantColor", "#F9B900");
 
         settings->setValue("fontFamily", "Consolas");
         settings->setValue("fontSize", 12);
